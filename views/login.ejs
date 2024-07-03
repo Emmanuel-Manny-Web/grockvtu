@@ -1,0 +1,152 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title> Login - Grock</title>
+
+    <!-- Google font file. If you want you can change. -->
+    <link href="css/css_1.css" rel="stylesheet">
+    <link href="images/grock-logo.jpeg" rel="icon">
+    <link href="images/grock-logo.jpeg" rel="apple-touch-icon">
+    
+    <link rel="stylesheet" href="css/bootstrap.min_1.css">
+    <link rel="stylesheet" href="css/toast.css">
+
+    <!-- Fontawesome font file css -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+
+    <!-- Template global css file. Requared all pages -->
+    <link rel="stylesheet" type="text/css" href="css/global.style.css">
+
+    
+</head>
+
+<body>
+
+
+<div class="wrapper">
+
+    <div class="wrapper-inline">
+        <!-- Header area start -->
+        <header>
+            <h1 class="page-title" style="text-transform: uppercase;">    Login
+</h1>
+        </header>
+        <!-- Header area end -->
+        <!-- Page content start -->
+        <main>
+            <div class="container">
+                <div class="form-divider"></div>
+
+
+                
+
+    <form method="post" role="form">
+        <input type="hidden" name="_token" value="IouoOr56EiRLbDThcKPr8v2uOqs89vuZnE86EZ96">
+
+        <div class="form-divider"></div>
+        <p class="text-center">
+            Enter your credentials to login
+        </p>
+        <div class="form-divider"></div>
+
+        <div class="form-row-group with-icons">
+            <div class="form-row no-padding">
+                <i class="fa fa-envelope"></i>
+                <input type="email" name="email" required="" class="form-element" placeholder="Email">
+            </div>
+        </div>
+        
+        <div class="form-mini-divider"></div>
+
+
+        <div class="form-row-group with-icons">
+            <div class="form-row no-padding">
+                <i class="fa fa-lock"></i>
+                <input type="password" name="password" required="" class="form-element" placeholder="Password">
+            </div>
+            <span style="display: none;"><input type="checkbox" name="remember" id="remember" checked=""></span>
+        </div>
+
+        
+
+
+        <div class="form-divider"></div>
+
+        <div class="form-row">
+            <button class="button circle block orange" type="submit">Login</button>
+        </div>
+    </form>
+
+
+    <div class="form-row txt-center mt-15">
+        Don't you have an account yet? <a href="/register" data-loader="show">Sign Up</a>
+    </div>
+
+
+            </div>
+
+            <div class="form-divider"></div>
+
+
+        </main>
+        <!-- Page content end -->
+    </div>
+</div>
+
+
+<!--Page loader DOM Elements. Requared all pages-->
+<div class="sweet-loader">
+    <div class="box">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+    </div>
+</div>
+
+<!-- JQuery library file. requared all pages -->
+<script src="js/jquery-3.2.1.min.js"></script>
+
+<!-- Template global script file. requared all pages -->
+<script src="js/global.script.js"></script>
+<script src="js/toast.js"></script>
+</body>
+<script>
+  const toasts = new Toasts()
+
+  const form = document.querySelector("form")
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault()
+
+    const email = form.email.value
+    const password = form.password.value
+
+    const res = await fetch('/signin', {
+      method: "post",
+      body: JSON.stringify({ email, password }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const data = await res.json()
+    if (data.ok) {
+      toasts.push({
+        title: 'Success',
+        content: `${data.message}`,
+        style: 'success',
+        dismissAfter: '1s'
+      })
+      setTimeout(() => {
+        location.assign('/dashboard')
+      }, 1000)
+    } else {
+      toasts.push({
+        title: 'Error',
+        content: '' + data.error,
+        style: 'error',
+        dismissAfter: '2s'
+      })
+    }
+  })
+</script>
+</html>

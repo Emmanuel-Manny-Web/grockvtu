@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+  <title> Register - Grock</title>
+
+  <!-- Google font file. If you want you can change. -->
+  <link href="css/css_1.css" rel="stylesheet">
+  <link href="images/grock-logo.jpeg" rel="icon">
+  <link href="images/grock-logo.jpeg" rel="apple-touch-icon">
+
+  <link rel="stylesheet" href="css/bootstrap.min_1.css">
+  <link rel="stylesheet" href="css/toast.css">
+
+  <!-- Fontawesome font file css -->
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+
+  <!-- Template global css file. Requared all pages -->
+  <link rel="stylesheet" type="text/css" href="css/global.style.css">
+
+
+</head>
+
+<body>
+
+
+  <div class="wrapper">
+
+    <div class="wrapper-inline">
+      <!-- Header area start -->
+      <header>
+        <h1 class="page-title" style="text-transform: uppercase;">Register</h1>
+      </header>
+      <!-- Header area end -->
+      <!-- Page content start -->
+      <main>
+        <div class="container">
+          <div class="form-divider"></div>
+          <form method="POST">
+            <div class="form-divider"></div>
+            <p class="text-center">
+              Fill in your details to register
+            </p>
+            <div class="form-divider"></div>
+
+
+            <div class="form-row-group with-icons">
+              <div class="form-row no-padding">
+                <i class="fa fa-user"></i>
+                <input type="text" name="name" required="" class="form-element" placeholder="Full Name">
+              </div>
+            </div>
+
+
+            <div class="form-mini-divider"></div>
+
+            <div class="form-row-group with-icons">
+              <div class="form-row no-padding">
+                <i class="fa fa-mobile-phone"></i>
+                <input type="tel" value="" name="phone" required="" class="form-element" placeholder="Phone Number">
+              </div>
+            </div>
+
+
+            <div class="form-mini-divider"></div>
+
+            <div class="form-row-group with-icons">
+              <div class="form-row no-padding">
+                <i class="fa fa-envelope"></i>
+                <input type="email" value="" name="email" required="" class="form-element" placeholder="Email">
+              </div>
+            </div>
+
+
+            <div class="form-mini-divider"></div>
+
+            <div class="form-row-group with-icons">
+              <div class="form-row no-padding">
+                <i class="fa fa-lock"></i>
+                <input type="password" name="password" required="" class="form-element" placeholder="Password">
+              </div>
+            </div>
+
+
+            <div class="form-mini-divider"></div>
+
+
+            <div class="form-row-group with-icons">
+              <div class="form-row no-padding">
+                <i class="fa fa-lock"></i>
+                <input type="password" name="password_confirmation" required="" class="form-element"
+                  placeholder="Confirm Password" id="password2">
+              </div>
+
+            </div>
+
+
+            <div class="form-mini-divider"></div>
+
+            <div class="form-row-group with-icons">
+              <div class="form-row no-padding">
+                <i class="fa fa-lock"></i>
+                <input type="number" maxlength="4" value="" name="pin" required="" class="form-element"
+                  placeholder="Account Pin" id="pin">
+              </div>
+            </div>
+
+            <div class="form-divider"></div>
+
+
+            <div class="form-row">
+              <button class="button circle block orange" type="submit">Register</button>
+            </div>
+          </form>
+
+
+
+
+
+          <div class="form-row txt-center mt-15">
+            Already a member? <a href="/login" data-loader="show">Sign In</a>
+          </div>
+
+        </div>
+
+        <div class="form-divider"></div>
+
+
+      </main>
+      <!-- Page content end -->
+    </div>
+  </div>
+
+
+  <!--Page loader DOM Elements. Requared all pages-->
+  <div class="sweet-loader">
+    <div class="box">
+      <div class="circle1"></div>
+      <div class="circle2"></div>
+      <div class="circle3"></div>
+    </div>
+  </div>
+
+  <!-- JQuery library file. requared all pages -->
+  <script src="js/jquery-3.2.1.min.js"></script>
+
+  <!-- Template global script file. requared all pages -->
+  <script src="js/global.script.js"></script>
+  <script src="js/toast.js"></script>
+</body>
+<script>
+  const toasts = new Toasts({
+    offsetX: 20, // 20px
+    offsetY: 20, // 20px
+    gap: 20, // The gap size in pixels between toasts
+    width: 300, // 300px
+    timing: 'ease', // See list of available CSS transition timings
+    duration: '.5s', // Transition duration
+    dimOld: true, // Dim old notifications while the newest notification stays highlighted
+    position: 'top-right' // top-left | top-center | top-right | bottom-left | bottom-center | bottom-right
+  })
+
+  const form = document.querySelector("form")
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault()
+
+    const email = form.email.value
+    const name = form.name.value
+    const phone = form.phone.value
+    const pin = form.pin.value
+    const password = form.password.value
+    const confirm = document.querySelector("#password2").value
+
+    if (password === confirm) {
+      const res = await fetch('/signup', {
+        method: "post",
+        body: JSON.stringify({ email, name, phone, pin, password }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await res.json()
+      if (data.ok) {
+        toasts.push({
+          title: 'Success Toast',
+          content: `${data.message}`,
+          style: 'success',
+          dismissAfter: '1s'
+        });
+        setTimeout(() => {
+          location.assign('/dashboard')
+        }, 1000)
+      } else {
+        toasts.push({
+          title: 'Error',
+          content: '' + data.error,
+          style: 'error',
+          dismissAfter: '2s'
+        });
+      }
+    } else {
+      toasts.push({
+        title: 'Mismatch',
+        content: 'Password do not match',
+        style: 'error',
+        dismissAfter: '2s'
+      });
+    }
+  })
+
+  const pin = document.querySelector("#pin")
+  pin.addEventListener("keyup", (event) => {
+    if (pin.value.length >= 4) {
+      pin.value = pin.value.slice(0, 4)
+      document.querySelector("#pin").blur()
+    }
+  })
+</script>
+</html>
